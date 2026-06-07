@@ -1,15 +1,12 @@
 export default function handler(req, res) {
-  const start = Date.now();
-  // Simulate minimal processing
-  const latency = Date.now() - start;
-  res.status(200).json({
-    latency,
-    timestamp: new Date().toISOString(),
-    region: process.env.VERCEL_REGION || "unknown"
-  });
-}
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-export default function handler(req, res) {
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -17,8 +14,9 @@ export default function handler(req, res) {
   const start = Date.now();
   const latency = Date.now() - start;
 
-  res.status(200).json({
+  return res.status(200).json({
     latency,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    region: process.env.VERCEL_REGION || "unknown"
   });
 }
